@@ -1,0 +1,20 @@
+{
+  "id": "18137369-87ab-4ad3-9de1-1af58d32ef1b",
+  "kind": "dataitem",
+  "metadata": {
+    "project": "proj",
+    "created": "2023-11-16T11:47:51.578014+01:00",
+    "updated": "2023-11-16T11:47:51.578014+01:00",
+    "name": "nefertem-schema",
+    "version": "18137369-87ab-4ad3-9de1-1af58d32ef1b",
+    "embedded": true
+  },
+  "spec": {
+    "key": "store://proj/artifacts/artifact/nefertem_schema:18137369-87ab-4ad3-9de1-1af58d32ef1b",
+    "path": "s3://proj/proj/artifacts/nefertem_schema.csv"
+  },
+  "status": { "state": "CREATED" },
+  "project": "proj",
+  "name": "nefertem-schema",
+  "embedded": true
+}

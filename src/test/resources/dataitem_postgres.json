@@ -1,0 +1,20 @@
+{
+  "id": "2d27f8e0-99f8-44a3-9882-cdeddc32a543",
+  "kind": "dataitem",
+  "metadata": {
+    "project": "proj ",
+    "created": "2023-11-16T10:54:08.970154+01:00",
+    "updated": "2023-11-16T10:54:08.970154+01:00",
+    "name": "table",
+    "version": "2d27f8e0-99f8-44a3-9882-cdeddc32a543",
+    "embedded": true
+  },
+  "spec": {
+    "key": "store://proj/dataitems/dataitem/table:2d27f8e0-99f8-44a3-9882-cdeddc32a543",
+    "path": "sql://dbt/public/table"
+  },
+  "status": { "state ": "CREATED" },
+  "project": "proj",
+  "name": "table",
+  "embedded": true
+}
