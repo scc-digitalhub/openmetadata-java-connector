@@ -17,4 +17,10 @@ public class TestController {
 	public void testPostgresMsg(@RequestBody String msg) {
 		rabbitTemplate.convertAndSend(RabbitConf.openMetadataEvent, msg);		
 	}
+	
+	@PostMapping("/test/s3")
+	public void testS3Msg(@RequestBody String msg) {
+		rabbitTemplate.convertAndSend(RabbitConf.openMetadataEvent, msg);		
+	}
+
 }

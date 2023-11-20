@@ -24,6 +24,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresParser;
+import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.S3Parser;
 
 @Service
 public class OpenMetadataService implements ApplicationListener<ContextRefreshedEvent> {
@@ -35,8 +36,14 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 	@Value("${openmetadata.host}")
 	private String openMetadataHost;
 	
-	@Value("${openmetadata.dataservice}")
-	private String openMetadataDataService;
+	@Value("${openmetadata.dataservice.name}")
+	private String openMetadataDataServiceName;
+	
+	@Value("${openmetadata.dataservice.sql}")
+	private String openMetadataDataServiceSql;
+	
+	@Value("${openmetadata.dataservice.s3}")
+	private String openMetadataDataServiceS3;
 	
 	OpenMetadata openMetadataGateway = null;
 	
@@ -54,16 +61,24 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 	}
 	
 	public void publicPostgresTable(PostgresParser data) {
-		DatabaseService databaseService = createDatabaseService();
+		DatabaseService databaseService = createPostgresDatabaseService();
 		Database database = createDatabase(databaseService, data.getDbName());
 		DatabaseSchema databaseSchema = createDatabaseSchema(database, data.getDbSchema());
-		createTable(databaseSchema, data.getKey(), data.getDbTable());
+		createTable(databaseSchema, data.getKey(), data.getDbTable(), data.getSource());
 	}
 	
-	private Table createTable(DatabaseSchema databaseSchema, String key, String name) {
+	public void publicS3Table(S3Parser data) {
+		DatabaseService databaseService = createS3DatabaseService();
+		Database database = createDatabase(databaseService, data.getDbName());
+		DatabaseSchema databaseSchema = createDatabaseSchema(database, data.getDbSchema());
+		createTable(databaseSchema, data.getKey(), data.getDbTable(), data.getSource());		
+	}
+	
+	private Table createTable(DatabaseSchema databaseSchema, String key, String name, String source) {
 		CreateTable createTable = new CreateTable();
 		createTable.setName(key);
 		createTable.setDisplayName(name);
+		createTable.setSourceUrl(source);
 		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
 		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
 		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
@@ -90,17 +105,34 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 	    return databasesApi.createOrUpdateDatabase(createdatabase);
 	  }
 	
-	private DatabaseService createDatabaseService() {
+	private DatabaseService createPostgresDatabaseService() {
 		DatabaseServicesApi databaseServicesApi = openMetadataGateway.buildClient(DatabaseServicesApi.class);
-		DatabaseService databaseService = databaseServicesApi.getDatabaseServiceByFQN(openMetadataDataService, "", "all");
-		if(databaseService == null) {
+		try {
+			DatabaseService databaseService = databaseServicesApi.getDatabaseServiceByFQN(openMetadataDataServiceSql, "", "all");
+			return databaseService;			
+		} catch (feign.FeignException.NotFound e) {
 			CreateDatabaseService createDatabaseService = new CreateDatabaseService();
 			createDatabaseService.setServiceType(CreateDatabaseService.ServiceTypeEnum.POSTGRES);
-			createDatabaseService.setName(openMetadataDataService);
-			createDatabaseService.setDisplayName(openMetadataDataService);
-			databaseService = databaseServicesApi.createOrUpdateDatabaseService(createDatabaseService);
+			createDatabaseService.setName(openMetadataDataServiceSql);
+			createDatabaseService.setDisplayName(openMetadataDataServiceName);
+			DatabaseService databaseService = databaseServicesApi.createOrUpdateDatabaseService(createDatabaseService);		
+			return databaseService;
 		}
-		return databaseService;
+	}
+	
+	private DatabaseService createS3DatabaseService() {
+		DatabaseServicesApi databaseServicesApi = openMetadataGateway.buildClient(DatabaseServicesApi.class);
+		try {
+			DatabaseService databaseService = databaseServicesApi.getDatabaseServiceByFQN(openMetadataDataServiceS3, "", "all");
+			return databaseService;
+		} catch (feign.FeignException.NotFound e) {
+			CreateDatabaseService createDatabaseService = new CreateDatabaseService();
+			createDatabaseService.setServiceType(CreateDatabaseService.ServiceTypeEnum.DATALAKE);
+			createDatabaseService.setName(openMetadataDataServiceS3);
+			createDatabaseService.setDisplayName(openMetadataDataServiceName);
+			DatabaseService databaseService = databaseServicesApi.createOrUpdateDatabaseService(createDatabaseService);
+			return databaseService;
+		}
 	}
 	
 //	private EntityReference buildEntityReference(String type, UUID id, String name) {

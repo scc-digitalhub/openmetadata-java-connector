@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.config.RabbitConf;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.helper.OpenMetadataService;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresParser;
+import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.S3Parser;
 
 @Component
 public class MessageQueueManager {
@@ -41,6 +42,9 @@ public class MessageQueueManager {
 				if(protocol.equalsIgnoreCase("sql")) {
 					PostgresParser parser = new PostgresParser(rootNode);
 					openMetadataService.publicPostgresTable(parser);					
+				} else if(protocol.equalsIgnoreCase("s3")) {
+					S3Parser parser = new S3Parser(rootNode);
+					openMetadataService.publicS3Table(parser);
 				}
 				break;
 			}

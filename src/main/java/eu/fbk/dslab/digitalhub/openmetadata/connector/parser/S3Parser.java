@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class PostgresParser {
+public class S3Parser {
 	private String project;
 	private String name;
 	private String version;
@@ -15,22 +15,19 @@ public class PostgresParser {
 	private String dbSchema;
 	private String dbTable;
 	
-	public PostgresParser(JsonNode rootNode) {
+	public S3Parser(JsonNode rootNode) {
 		project = rootNode.get("metadata").get("project").asText();
 		name = rootNode.get("metadata").get("name").asText();
 		version = rootNode.get("metadata").get("version").asText();
 		source = rootNode.get("spec").get("key").asText();
 		key = StringUtils.remove(source, ":" + version);
 		path = rootNode.get("spec").get("path").asText();
-		String[] strings = StringUtils.remove(path, "sql://").split("/");
-		if(strings.length == 3) {
-			dbName = strings[0];
-			dbSchema = strings[1];
-			dbTable = strings[2];
-		} else {
-			dbName = strings[0];
-			dbSchema = "public";
-			dbTable = strings[1];
+		String[] strings = StringUtils.remove(path, "s3://").split("/");
+		dbName = strings[0];
+		dbTable = strings[strings.length-1];
+		dbSchema = "";
+		for(int i=1; i<strings.length-1; i++) {
+			dbSchema += "/" + strings[i];
 		}
 	}
 
@@ -74,6 +71,14 @@ public class PostgresParser {
 		this.key = key;
 	}
 
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 	public String getDbName() {
 		return dbName;
 	}
@@ -98,12 +103,4 @@ public class PostgresParser {
 		this.dbTable = dbTable;
 	}
 
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-	
 }
