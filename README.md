@@ -1,7 +1,9 @@
 # openmetadata-java-connector
 
 Connector to store in OpenMetadata some Dataitem info coming from the DigitaHub Platform. 
+
 The data must be published on a RabbitMQ Queue in 'JSON' format.
+
 Config the following env variables:
 - **RABBITMQ_HOST** : RabbitMQ host
 - **RABBITMQ_PORT** : RabbitMQ port
