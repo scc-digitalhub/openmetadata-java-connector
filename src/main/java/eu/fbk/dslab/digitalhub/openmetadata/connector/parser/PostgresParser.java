@@ -20,7 +20,7 @@ public class PostgresParser {
 		name = rootNode.get("metadata").get("name").asText();
 		version = rootNode.get("metadata").get("version").asText();
 		source = rootNode.get("spec").get("key").asText();
-		key = StringUtils.remove(source, ":" + version);
+		key = project + "_" + name;
 		path = rootNode.get("spec").get("path").asText();
 		String[] strings = StringUtils.remove(path, "sql://").split("/");
 		if(strings.length == 3) {

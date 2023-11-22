@@ -39,6 +39,9 @@ import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.S3Parser;
 public class OpenMetadataService implements ApplicationListener<ContextRefreshedEvent> {
 	private static transient final Logger logger = LoggerFactory.getLogger(OpenMetadataService.class);
 	
+	public static final String versionProp = "version";
+	public static final String sourceProp = "source";
+	
 	@Value("${openmetadata.token}")
 	private String openMetadataToken;
 	
@@ -87,13 +90,17 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		CreateTable createTable = new CreateTable();
 		createTable.setName(key);
 		createTable.setDisplayName(name);
-		createTable.setSourceUrl(source);
+		//createTable.setSourceUrl(source);
 		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
 		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
 		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
 		Table table = tablesApi.createOrUpdateTable(createTable);
-		CustomProperty customProperty = createCustomTableStringProperty("version", "dataitem version");
-		addCustomPropertyToTable(table, customProperty, version);
+		CustomProperty customPropVersion = createCustomTableStringProperty(versionProp, "Dataitem version");
+		CustomProperty customPropSource = createCustomTableStringProperty(sourceProp, "Dataitem source");
+		HashMap<String, String> values = new HashMap<>();
+		values.put(versionProp, version);
+		values.put(sourceProp, source);
+		addCustomPropertyToTable(table, values);
 		return table;
 		//return tablesApi.getTableByID(table.getId(), "*", "all");
 	}
@@ -174,11 +181,9 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		return customProperty;
 	}
 	  
-	private void addCustomPropertyToTable(Table table, CustomProperty customProperty, String value) {
+	private void addCustomPropertyToTable(Table table, HashMap<String, String> customProperties) {
 		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
-		tablesApi.patchTable(table.getId(), List.of(buildPatch("add", "/extension", new HashMap<>() {{
-			put(customProperty.getName(), value);
-		}})));
+		tablesApi.patchTable(table.getId(), List.of(buildPatch("add", "/extension", customProperties)));
 	}
 	 
 	private Object buildPatch(String op, String path, Object value) {

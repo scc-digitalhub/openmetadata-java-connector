@@ -11,7 +11,7 @@
   },
   "spec": {
     "key": "store://proj/artifacts/artifact/nefertem_schema:18137369-87ab-4ad3-9de1-1af58d32ef1b",
-    "path": "s3://proj/proj/artifacts/nefertem_schema.csv"
+    "path": "s3://proj/artifacts/nefertem_schema.csv"
   },
   "status": { "state": "CREATED" },
   "project": "proj",
