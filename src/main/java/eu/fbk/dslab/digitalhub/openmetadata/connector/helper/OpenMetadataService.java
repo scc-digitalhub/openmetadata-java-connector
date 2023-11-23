@@ -70,6 +70,9 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		config.setSecurityConfig(openMetadataJWTClientConfig);		
 		
 		openMetadataGateway = new OpenMetadata(config);
+		
+		createCustomTableStringProperty(versionProp, "Dataitem version");
+		createCustomTableStringProperty(sourceProp, "Dataitem source");
 	}
 	
 	public void publicPostgresTable(PostgresParser data) {
@@ -95,8 +98,6 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
 		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
 		Table table = tablesApi.createOrUpdateTable(createTable);
-		CustomProperty customPropVersion = createCustomTableStringProperty(versionProp, "Dataitem version");
-		CustomProperty customPropSource = createCustomTableStringProperty(sourceProp, "Dataitem source");
 		HashMap<String, String> values = new HashMap<>();
 		values.put(versionProp, version);
 		values.put(sourceProp, source);
