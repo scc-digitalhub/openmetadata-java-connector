@@ -3,6 +3,7 @@ package eu.fbk.dslab.digitalhub.openmetadata.connector.helper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.openmetadata.client.api.DatabaseSchemasApi;
@@ -22,6 +23,7 @@ import org.openmetadata.client.model.DatabaseSchema;
 import org.openmetadata.client.model.DatabaseService;
 import org.openmetadata.client.model.EntityReference;
 import org.openmetadata.client.model.Table;
+import org.openmetadata.client.model.TableData;
 import org.openmetadata.client.model.Type;
 import org.openmetadata.schema.security.client.OpenMetadataJWTClientConfig;
 import org.openmetadata.schema.services.connections.metadata.AuthProvider;
@@ -114,12 +116,36 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		if(!columns.isEmpty()) {
 			createTable.getColumns().addAll(columns);
 		}
+		
 		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
 		Table table = tablesApi.createOrUpdateTable(createTable);
 		HashMap<String, String> values = new HashMap<>();
 		values.put(versionProp, data.getVersion());
 		values.put(sourceProp, data.getSource());
 		addCustomPropertyToTable(table, values);
+		
+		if(!data.getColumns().isEmpty()) {
+			TableData td = new TableData();
+			List<String> columnNames = new ArrayList<>();
+			List<List<Object>> sampleData = new ArrayList<>();
+			for(int colIndex = 0; colIndex < data.getColumns().size(); colIndex++) {
+				PostgresColumn col = data.getColumns().get(colIndex);
+				for(int rowIndex = 0; rowIndex < col.getPreview().size(); rowIndex++) {
+					List<Object> objectList = null;
+					if(sampleData.size() <= rowIndex) {
+						objectList = new ArrayList<>();
+						sampleData.add(objectList);						
+					} else {
+						objectList = sampleData.get(rowIndex);
+					}
+					objectList.add(col.getPreview().get(rowIndex));
+				}
+				columnNames.add(col.getName());
+			}
+			td.columns(columnNames);
+			td.rows(sampleData);
+			tablesApi.addSampleData(table.getId(), td);
+		}
 		return table;
 		//return tablesApi.getTableByID(table.getId(), "*", "all");
 	}
