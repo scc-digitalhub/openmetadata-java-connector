@@ -1,5 +1,11 @@
 package eu.fbk.dslab.digitalhub.openmetadata.connector.parser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +20,7 @@ public class PostgresParser {
 	private String dbName;
 	private String dbSchema;
 	private String dbTable;
+	private List<PostgresColumn> columns = new ArrayList<>();
 	
 	public PostgresParser(JsonNode rootNode) {
 		project = rootNode.get("metadata").get("project").asText();
@@ -26,11 +33,35 @@ public class PostgresParser {
 		if(strings.length == 3) {
 			dbName = strings[0];
 			dbSchema = strings[1];
-			dbTable = strings[2];
+			dbTable = rootNode.get("metadata").get("name").asText();
 		} else {
 			dbName = strings[0];
 			dbSchema = "public";
-			dbTable = strings[1];
+			dbTable = rootNode.get("metadata").get("name").asText();
+		}
+		Map<String, JsonNode> previewMap = new HashMap<>();
+		if(rootNode.get("status").hasNonNull("preview")) {
+			Iterator<JsonNode> previewsNode = rootNode.get("status").get("preview").elements();
+			while(previewsNode.hasNext()) {
+				JsonNode previewNode = (JsonNode) previewsNode.next();
+				previewMap.put(previewNode.get("name").asText(), previewNode);
+			}
+		}
+		Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").elements();
+		while(columnsNode.hasNext()) {
+			JsonNode columnNode = (JsonNode) columnsNode.next();
+			String name = columnNode.get("name").asText();
+			String type = columnNode.get("type").asText();
+			PostgresColumn column = new PostgresColumn(name, PostgresType.getDataType(type));
+			if(previewMap.containsKey(name)) {
+				JsonNode previewNode = previewMap.get(name);
+				Iterator<JsonNode> elements = previewNode.get("value").elements();
+				while(elements.hasNext()) {
+					JsonNode node = elements.next();
+					column.getPreview().add(node.asText());
+				}
+			}
+			columns.add(column);
 		}
 	}
 
@@ -105,5 +136,14 @@ public class PostgresParser {
 	public void setSource(String source) {
 		this.source = source;
 	}
+
+	public List<PostgresColumn> getColumns() {
+		return columns;
+	}
+
+	public void setColumns(List<PostgresColumn> columns) {
+		this.columns = columns;
+	}
+
 	
 }

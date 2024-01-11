@@ -1,5 +1,6 @@
 package eu.fbk.dslab.digitalhub.openmetadata.connector.helper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
+import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresColumn;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresParser;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.S3Parser;
 
@@ -79,28 +81,61 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		DatabaseService databaseService = createPostgresDatabaseService();
 		Database database = createDatabase(databaseService, data.getDbName());
 		DatabaseSchema databaseSchema = createDatabaseSchema(database, data.getDbSchema());
-		createTable(databaseSchema, data.getKey(), data.getDbTable(), data.getSource(), data.getVersion());
+		createPostgresTable(databaseSchema, data);
 	}
 	
 	public void publicS3Table(S3Parser data) {
 		DatabaseService databaseService = createS3DatabaseService();
 		Database database = createDatabase(databaseService, data.getDbName());
 		DatabaseSchema databaseSchema = createDatabaseSchema(database, data.getDbSchema());
-		createTable(databaseSchema, data.getKey(), data.getDbTable(), data.getSource(), data.getVersion());		
+		createS3Table(databaseSchema, data);		
 	}
 	
-	private Table createTable(DatabaseSchema databaseSchema, String key, String name, String source, String version) {
+	private Table createPostgresTable(DatabaseSchema databaseSchema, PostgresParser data) {
 		CreateTable createTable = new CreateTable();
-		createTable.setName(key);
-		createTable.setDisplayName(name);
+		createTable.setName(data.getKey());
+		createTable.setDisplayName(data.getDbTable());
+		//createTable.setSourceUrl(source);
+		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
+		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
+		List<Column> columns = new ArrayList<>();
+		if(!data.getColumns().isEmpty()) {
+			for(PostgresColumn col : data.getColumns()) {
+				Column column = new Column();
+				column.setName(col.getName());
+				column.setDisplayName(col.getName());
+				column.setDataType(col.getType());
+				if(col.getConstraint() != null) {
+					column.constraint(col.getConstraint());
+				}
+				columns.add(column);
+			}
+		}
+		if(!columns.isEmpty()) {
+			createTable.getColumns().addAll(columns);
+		}
+		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
+		Table table = tablesApi.createOrUpdateTable(createTable);
+		HashMap<String, String> values = new HashMap<>();
+		values.put(versionProp, data.getVersion());
+		values.put(sourceProp, data.getSource());
+		addCustomPropertyToTable(table, values);
+		return table;
+		//return tablesApi.getTableByID(table.getId(), "*", "all");
+	}
+	
+	private Table createS3Table(DatabaseSchema databaseSchema, S3Parser data) {
+		CreateTable createTable = new CreateTable();
+		createTable.setName(data.getKey());
+		createTable.setDisplayName(data.getDbTable());
 		//createTable.setSourceUrl(source);
 		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
 		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
 		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
 		Table table = tablesApi.createOrUpdateTable(createTable);
 		HashMap<String, String> values = new HashMap<>();
-		values.put(versionProp, version);
-		values.put(sourceProp, source);
+		values.put(versionProp, data.getVersion());
+		values.put(sourceProp, data.getSource());
 		addCustomPropertyToTable(table, values);
 		return table;
 		//return tablesApi.getTableByID(table.getId(), "*", "all");
@@ -154,22 +189,6 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		}
 	}
 	
-	private Column createColumn(
-			String colName,
-			String colDesc,
-			Column.DataTypeEnum dataType,
-			Column.ConstraintEnum constraint) {
-		Column column = new Column();
-		column.setName(colName);
-		column.setDescription(colDesc);
-		column.setDisplayName(colName);
-		column.setDataType(dataType);
-		if (constraint != null) {
-		  column.constraint(constraint);
-		}
-		return column;
-	}
-
 	private CustomProperty createCustomTableStringProperty(String name, String description) {
 		MetadataApi metadataApi = openMetadataGateway.buildClient(MetadataApi.class);
 		Type tableType = metadataApi.getTypeByName("table", new HashMap<>());
@@ -187,6 +206,7 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		tablesApi.patchTable(table.getId(), List.of(buildPatch("add", "/extension", customProperties)));
 	}
 	 
+	@SuppressWarnings("serial")
 	private Object buildPatch(String op, String path, Object value) {
 		return new HashMap<>() {{
 			put("op", op);
