@@ -1,5 +1,11 @@
 package eu.fbk.dslab.digitalhub.openmetadata.connector.parser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +20,7 @@ public class S3Parser {
 	private String dbName;
 	private String dbSchema;
 	private String dbTable;
+	private List<TableColumn> columns = new ArrayList<>();
 	
 	public S3Parser(JsonNode rootNode) {
 		project = rootNode.get("metadata").get("project").asText();
@@ -29,6 +36,30 @@ public class S3Parser {
 		for(int i=1; i<strings.length-1; i++) {
 			dbSchema += "/" + strings[i];
 		}
+		Map<String, JsonNode> previewMap = new HashMap<>();
+		if(rootNode.get("status").hasNonNull("preview")) {
+			Iterator<JsonNode> previewsNode = rootNode.get("status").get("preview").elements();
+			while(previewsNode.hasNext()) {
+				JsonNode previewNode = (JsonNode) previewsNode.next();
+				previewMap.put(previewNode.get("name").asText(), previewNode);
+			}
+		}
+		Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").elements();
+		while(columnsNode.hasNext()) {
+			JsonNode columnNode = (JsonNode) columnsNode.next();
+			String name = columnNode.get("name").asText();
+			String type = columnNode.get("type").asText();
+			TableColumn column = new TableColumn(name, PostgresType.getDataType(type));
+			if(previewMap.containsKey(name)) {
+				JsonNode previewNode = previewMap.get(name);
+				Iterator<JsonNode> elements = previewNode.get("value").elements();
+				while(elements.hasNext()) {
+					JsonNode node = elements.next();
+					column.getPreview().add(node.asText());
+				}
+			}
+			columns.add(column);
+		}		
 	}
 
 	public String getProject() {
@@ -101,6 +132,14 @@ public class S3Parser {
 
 	public void setDbTable(String dbTable) {
 		this.dbTable = dbTable;
+	}
+
+	public List<TableColumn> getColumns() {
+		return columns;
+	}
+
+	public void setColumns(List<TableColumn> columns) {
+		this.columns = columns;
 	}
 
 }

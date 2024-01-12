@@ -41,14 +41,14 @@ public class PostgresType {
 //			return Column.DataTypeEnum.;
 //		}
 //		if(type.equalsIgnoreCase("geopoint")) {
-//			return Column.DataTypeEnum.;
+//			return Column.DataTypeEnum.POINT;
 //		}
 		if(type.equalsIgnoreCase("geojson")) {
 			return Column.DataTypeEnum.JSON;
 		}
 //		if(type.equalsIgnoreCase("any")) {
-//			return Column.DataTypeEnum.;
+//			return Column.DataTypeEnum.VARIANT;
 //		}
-		return Column.DataTypeEnum.ERROR;
+		return Column.DataTypeEnum.UNKNOWN;
 	}
 }

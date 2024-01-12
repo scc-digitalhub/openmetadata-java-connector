@@ -3,7 +3,6 @@ package eu.fbk.dslab.digitalhub.openmetadata.connector.helper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.openmetadata.client.api.DatabaseSchemasApi;
@@ -35,9 +34,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresColumn;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresParser;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.S3Parser;
+import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.TableColumn;
 
 @Service
 public class OpenMetadataService implements ApplicationListener<ContextRefreshedEvent> {
@@ -100,9 +99,69 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		//createTable.setSourceUrl(source);
 		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
 		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
+		
 		List<Column> columns = new ArrayList<>();
 		if(!data.getColumns().isEmpty()) {
-			for(PostgresColumn col : data.getColumns()) {
+			for(TableColumn col : data.getColumns()) {
+				Column column = new Column();
+				column.setName(col.getName());
+				column.setDisplayName(col.getName());
+				column.setDataType(col.getType());
+				if(col.getConstraint() != null) {
+					column.constraint(col.getConstraint());
+				}
+				columns.add(column);
+			}
+		}
+		if(!columns.isEmpty()) {
+			createTable.getColumns().addAll(columns);
+		}
+		
+		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
+		Table table = tablesApi.createOrUpdateTable(createTable);		
+		HashMap<String, String> values = new HashMap<>();
+		values.put(versionProp, data.getVersion());
+		values.put(sourceProp, data.getSource());
+		addCustomPropertyToTable(table, values);
+		
+		if(!data.getColumns().isEmpty()) {
+			TableData td = new TableData();
+			List<String> columnNames = new ArrayList<>();
+			List<List<Object>> sampleData = new ArrayList<>();
+			for(int colIndex = 0; colIndex < data.getColumns().size(); colIndex++) {
+				TableColumn col = data.getColumns().get(colIndex);
+				for(int rowIndex = 0; rowIndex < col.getPreview().size(); rowIndex++) {
+					List<Object> objectList = null;
+					if(sampleData.size() <= rowIndex) {
+						objectList = new ArrayList<>();
+						sampleData.add(objectList);						
+					} else {
+						objectList = sampleData.get(rowIndex);
+					}
+					objectList.add(col.getPreview().get(rowIndex));
+				}
+				columnNames.add(col.getName());
+			}
+			td.columns(columnNames);
+			td.rows(sampleData);
+			tablesApi.addSampleData(table.getId(), td);
+		}
+		
+		return table;
+		//return tablesApi.getTableByID(table.getId(), "*", "all");
+	}
+	
+	private Table createS3Table(DatabaseSchema databaseSchema, S3Parser data) {
+		CreateTable createTable = new CreateTable();
+		createTable.setName(data.getKey());
+		createTable.setDisplayName(data.getDbTable());
+		//createTable.setSourceUrl(source);
+		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
+		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
+
+		List<Column> columns = new ArrayList<>();
+		if(!data.getColumns().isEmpty()) {
+			for(TableColumn col : data.getColumns()) {
 				Column column = new Column();
 				column.setName(col.getName());
 				column.setDisplayName(col.getName());
@@ -123,13 +182,13 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		values.put(versionProp, data.getVersion());
 		values.put(sourceProp, data.getSource());
 		addCustomPropertyToTable(table, values);
-		
+
 		if(!data.getColumns().isEmpty()) {
 			TableData td = new TableData();
 			List<String> columnNames = new ArrayList<>();
 			List<List<Object>> sampleData = new ArrayList<>();
 			for(int colIndex = 0; colIndex < data.getColumns().size(); colIndex++) {
-				PostgresColumn col = data.getColumns().get(colIndex);
+				TableColumn col = data.getColumns().get(colIndex);
 				for(int rowIndex = 0; rowIndex < col.getPreview().size(); rowIndex++) {
 					List<Object> objectList = null;
 					if(sampleData.size() <= rowIndex) {
@@ -146,23 +205,7 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 			td.rows(sampleData);
 			tablesApi.addSampleData(table.getId(), td);
 		}
-		return table;
-		//return tablesApi.getTableByID(table.getId(), "*", "all");
-	}
-	
-	private Table createS3Table(DatabaseSchema databaseSchema, S3Parser data) {
-		CreateTable createTable = new CreateTable();
-		createTable.setName(data.getKey());
-		createTable.setDisplayName(data.getDbTable());
-		//createTable.setSourceUrl(source);
-		createTable.setTableType(CreateTable.TableTypeEnum.REGULAR);
-		createTable.setDatabaseSchema(databaseSchema.getFullyQualifiedName());
-		TablesApi tablesApi = openMetadataGateway.buildClient(TablesApi.class);
-		Table table = tablesApi.createOrUpdateTable(createTable);
-		HashMap<String, String> values = new HashMap<>();
-		values.put(versionProp, data.getVersion());
-		values.put(sourceProp, data.getSource());
-		addCustomPropertyToTable(table, values);
+
 		return table;
 		//return tablesApi.getTableByID(table.getId(), "*", "all");
 	}

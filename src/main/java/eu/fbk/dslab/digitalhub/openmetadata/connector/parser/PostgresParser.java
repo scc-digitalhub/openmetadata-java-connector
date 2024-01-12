@@ -20,7 +20,7 @@ public class PostgresParser {
 	private String dbName;
 	private String dbSchema;
 	private String dbTable;
-	private List<PostgresColumn> columns = new ArrayList<>();
+	private List<TableColumn> columns = new ArrayList<>();
 	
 	public PostgresParser(JsonNode rootNode) {
 		project = rootNode.get("metadata").get("project").asText();
@@ -52,7 +52,7 @@ public class PostgresParser {
 			JsonNode columnNode = (JsonNode) columnsNode.next();
 			String name = columnNode.get("name").asText();
 			String type = columnNode.get("type").asText();
-			PostgresColumn column = new PostgresColumn(name, PostgresType.getDataType(type));
+			TableColumn column = new TableColumn(name, PostgresType.getDataType(type));
 			if(previewMap.containsKey(name)) {
 				JsonNode previewNode = previewMap.get(name);
 				Iterator<JsonNode> elements = previewNode.get("value").elements();
@@ -137,11 +137,11 @@ public class PostgresParser {
 		this.source = source;
 	}
 
-	public List<PostgresColumn> getColumns() {
+	public List<TableColumn> getColumns() {
 		return columns;
 	}
 
-	public void setColumns(List<PostgresColumn> columns) {
+	public void setColumns(List<TableColumn> columns) {
 		this.columns = columns;
 	}
 

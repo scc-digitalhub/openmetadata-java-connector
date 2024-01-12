@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.openmetadata.client.model.Column;
 
-public class PostgresColumn {
+public class TableColumn {
 	private String name;
 	private Column.DataTypeEnum type;
 	private Column.ConstraintEnum constraint;
 	private List<String> preview = new ArrayList<>();
 	
-	public PostgresColumn() {}
+	public TableColumn() {}
 	
-	public PostgresColumn(String name, Column.DataTypeEnum type) {
+	public TableColumn(String name, Column.DataTypeEnum type) {
 		this.name = name;
 		this.type = type;
 	}
