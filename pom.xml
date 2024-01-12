@@ -44,7 +44,7 @@
 		<dependency>
 		  <groupId>org.open-metadata</groupId>
 		  <artifactId>openmetadata-java-client</artifactId>
-		  <version>1.2.0</version>
+		  <version>1.2.4</version>
 		</dependency>
 		
 		<dependency>
