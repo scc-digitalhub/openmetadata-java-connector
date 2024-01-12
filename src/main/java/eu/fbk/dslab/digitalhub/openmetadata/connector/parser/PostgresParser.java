@@ -1,28 +1,13 @@
 package eu.fbk.dslab.digitalhub.openmetadata.connector.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class PostgresParser {
-	private String project;
-	private String name;
-	private String version;
-	private String path;
-	private String key;
-	private String source;
-	private String dbName;
-	private String dbSchema;
-	private String dbTable;
-	private List<TableColumn> columns = new ArrayList<>();
+public class PostgresParser extends DataItemParser {
 	
-	public PostgresParser(JsonNode rootNode) {
+	@Override
+	public void parseItem(JsonNode rootNode) {
 		project = rootNode.get("metadata").get("project").asText();
 		name = rootNode.get("metadata").get("name").asText();
 		version = rootNode.get("metadata").get("version").asText();
@@ -39,111 +24,7 @@ public class PostgresParser {
 			dbSchema = "public";
 			dbTable = rootNode.get("metadata").get("name").asText();
 		}
-		Map<String, JsonNode> previewMap = new HashMap<>();
-		if(rootNode.get("status").hasNonNull("preview")) {
-			Iterator<JsonNode> previewsNode = rootNode.get("status").get("preview").elements();
-			while(previewsNode.hasNext()) {
-				JsonNode previewNode = (JsonNode) previewsNode.next();
-				previewMap.put(previewNode.get("name").asText(), previewNode);
-			}
-		}
-		Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").elements();
-		while(columnsNode.hasNext()) {
-			JsonNode columnNode = (JsonNode) columnsNode.next();
-			String name = columnNode.get("name").asText();
-			String type = columnNode.get("type").asText();
-			TableColumn column = new TableColumn(name, PostgresType.getDataType(type));
-			if(previewMap.containsKey(name)) {
-				JsonNode previewNode = previewMap.get(name);
-				Iterator<JsonNode> elements = previewNode.get("value").elements();
-				while(elements.hasNext()) {
-					JsonNode node = elements.next();
-					column.getPreview().add(node.asText());
-				}
-			}
-			columns.add(column);
-		}
+		fillColumns(rootNode);
 	}
 
-	public String getProject() {
-		return project;
-	}
-
-	public void setProject(String project) {
-		this.project = project;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getDbName() {
-		return dbName;
-	}
-
-	public void setDbName(String dbName) {
-		this.dbName = dbName;
-	}
-
-	public String getDbSchema() {
-		return dbSchema;
-	}
-
-	public void setDbSchema(String dbSchema) {
-		this.dbSchema = dbSchema;
-	}
-
-	public String getDbTable() {
-		return dbTable;
-	}
-
-	public void setDbTable(String dbTable) {
-		this.dbTable = dbTable;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public List<TableColumn> getColumns() {
-		return columns;
-	}
-
-	public void setColumns(List<TableColumn> columns) {
-		this.columns = columns;
-	}
-
-	
 }

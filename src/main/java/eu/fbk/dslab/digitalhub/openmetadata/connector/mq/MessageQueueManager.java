@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.fbk.dslab.digitalhub.openmetadata.connector.config.RabbitConf;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.helper.OpenMetadataService;
+import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.DataItemParser;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.PostgresParser;
 import eu.fbk.dslab.digitalhub.openmetadata.connector.parser.S3Parser;
 
@@ -39,13 +40,14 @@ public class MessageQueueManager {
 			case "dataitem": {
 				String path = rootNode.get("spec").get("path").asText();
 				String protocol = path.split(":")[0];
+				DataItemParser parser = null;
 				if(protocol.equalsIgnoreCase("sql")) {
-					PostgresParser parser = new PostgresParser(rootNode);
-					openMetadataService.publicPostgresTable(parser);					
+					parser = new PostgresParser();
 				} else if(protocol.equalsIgnoreCase("s3")) {
-					S3Parser parser = new S3Parser(rootNode);
-					openMetadataService.publicS3Table(parser);
+					parser = new S3Parser();
 				}
+				parser.parseItem(rootNode);
+				openMetadataService.publicTable(parser);
 				break;
 			}
 			default:
