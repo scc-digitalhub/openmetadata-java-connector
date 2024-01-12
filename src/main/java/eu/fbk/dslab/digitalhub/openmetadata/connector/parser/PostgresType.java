@@ -34,15 +34,15 @@ public class PostgresType {
 		if(type.equalsIgnoreCase("year")) {
 			return Column.DataTypeEnum.YEAR;
 		}
-//		if(type.equalsIgnoreCase("yearmonth")) {
-//			return Column.DataTypeEnum.;
-//		}
+		if(type.equalsIgnoreCase("yearmonth")) {
+			return Column.DataTypeEnum.DATE;
+		}
 //		if(type.equalsIgnoreCase("duration")) {
 //			return Column.DataTypeEnum.;
 //		}
-//		if(type.equalsIgnoreCase("geopoint")) {
-//			return Column.DataTypeEnum.POINT;
-//		}
+		if(type.equalsIgnoreCase("geopoint")) {
+			return Column.DataTypeEnum.POINT;
+		}
 		if(type.equalsIgnoreCase("geojson")) {
 			return Column.DataTypeEnum.JSON;
 		}
