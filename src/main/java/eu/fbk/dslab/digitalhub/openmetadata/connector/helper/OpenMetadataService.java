@@ -87,6 +87,7 @@ public class OpenMetadataService implements ApplicationListener<ContextRefreshed
 		Database database = createDatabase(databaseService, data.getDbName());
 		DatabaseSchema databaseSchema = createDatabaseSchema(database, data.getDbSchema());
 		createTable(databaseSchema, data);
+		logger.info(String.format("publicTable[%s]", data.getPath()));
 	}
 	
 	private Table createTable(DatabaseSchema databaseSchema, DataItemParser data) {
