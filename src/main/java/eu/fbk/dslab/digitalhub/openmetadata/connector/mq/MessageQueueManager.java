@@ -33,7 +33,7 @@ public class MessageQueueManager {
 	public void openMetadataEventCallback(Message delivery) {
         try {
             String json = new String(delivery.getBody(), "UTF-8");
-            logger.info("openMetadataEventCallback:" + json);
+            logger.debug("openMetadataEventCallback:" + json);
             JsonNode rootNode = mapper.readTree(json);
             String kind = rootNode.get("kind").asText();
             switch (kind) {
@@ -45,13 +45,15 @@ public class MessageQueueManager {
 					parser = new PostgresParser();
 				} else if(protocol.equalsIgnoreCase("s3")) {
 					parser = new S3Parser();
+				} else {
+					throw new IllegalArgumentException("Unexpected protocol value: " + protocol);
 				}
 				parser.parseItem(rootNode);
 				openMetadataService.publicTable(parser);
 				break;
 			}
 			default:
-				throw new IllegalArgumentException("Unexpected value: " + kind);
+				throw new IllegalArgumentException("Unexpected kind value: " + kind);
 			} 
         } catch (Exception e) {
             logger.warn(String.format("openMetadataEventCallback:%s", e.getMessage()));
