@@ -1,92 +1,94 @@
 {
-  "id": "18137369-87ab-4ad3-9de1-1af58d32ef1b",
-  "kind": "dataitem",
-  "metadata": {
+  "it.smartcommunitylabdhub.core.models.entities.dataitem.DataItemEntity": {
+    "id": "18137369-87ab-4ad3-9de1-1af58d32ef1b",
+    "kind": "dataitem",
+    "metadata": {
+      "project": "proj",
+      "created": "2023-11-16T11:47:51.578014+01:00",
+      "updated": "2023-11-16T11:47:51.578014+01:00",
+      "name": "nefertem-schema",
+      "version": "18137369-87ab-4ad3-9de1-1af58d32ef1b",
+      "embedded": true
+    },
+    "spec": {
+      "key": "store://proj/artifacts/artifact/nefertem_schema:18137369-87ab-4ad3-9de1-1af58d32ef1b",
+      "path": "s3://proj/artifacts/nefertem_schema.csv",
+      "schema": [
+        { "name": "Index", "type": "integer" },
+        { "name": "Organization Id", "type": "string" },
+        { "name": "Name", "type": "string" },
+        { "name": "Website", "type": "string" },
+        { "name": "Country", "type": "string" },
+        { "name": "Description", "type": "string" },
+        { "name": "Founded", "type": "integer" },
+        { "name": "Industry", "type": "string" },
+        { "name": "Number of employees", "type": "integer" }
+      ]    
+    },
+    "status": { 
+      "state": "CREATED",
+      "preview": [
+        { "name": "Index", "value": [2, 233, 250, 525, 678] },
+        {
+          "name": "Organization Id",
+          "value": [
+            "AAC4f9aBF86EAeF",
+            "27fbC78271f3Aa2",
+            "B715731fa4a6CDB",
+            "df66E70fAE1aa5d",
+            "A3B8d27d51aae2f"
+          ]
+        },
+        {
+          "name": "Name",
+          "value": [
+            "Orr-Armstrong",
+            "Chambers-Kemp",
+            "Rojas, Andrews and Odonnell",
+            "Barnett-Randolph",
+            "Hanson, Newman and Bradley"
+          ]
+        },
+        {
+          "name": "Website",
+          "value": [
+            "https://www.chapman.net/",
+            "http://cooley-murphy.com/",
+            "http://www.wells-harrison.org/",
+            "http://donaldson.com/",
+            "http://www.shepherd.com/"
+          ]
+        },
+        {
+          "name": "Country",
+          "value": ["Algeria", "Algeria", "Algeria", "Algeria", "Algeria"]
+        },
+        {
+          "name": "Description",
+          "value": [
+            "Ergonomic radical budgetary management",
+            "Visionary attitude-oriented analyzer",
+            "Right-sized explicit migration",
+            "Centralized 24hour adapter",
+            "Customizable fresh-thinking task-force"
+          ]
+        },
+        { "name": "Founded", "value": [1970, 2021, 1981, 1998, 2021] },
+        {
+          "name": "Industry",
+          "value": [
+            "Import / Export",
+            "Accounting",
+            "Library",
+            "Automotive",
+            "Individual / Family Services"
+          ]
+        },
+        { "name": "Number of employees", "value": [7994, 4288, 6429, 7518, 2135] }
+      ]		 
+    },
     "project": "proj",
-    "created": "2023-11-16T11:47:51.578014+01:00",
-    "updated": "2023-11-16T11:47:51.578014+01:00",
     "name": "nefertem-schema",
-    "version": "18137369-87ab-4ad3-9de1-1af58d32ef1b",
     "embedded": true
-  },
-  "spec": {
-    "key": "store://proj/artifacts/artifact/nefertem_schema:18137369-87ab-4ad3-9de1-1af58d32ef1b",
-    "path": "s3://proj/artifacts/nefertem_schema.csv",
-    "schema": [
-      { "name": "Index", "type": "integer" },
-      { "name": "Organization Id", "type": "string" },
-      { "name": "Name", "type": "string" },
-      { "name": "Website", "type": "string" },
-      { "name": "Country", "type": "string" },
-      { "name": "Description", "type": "string" },
-      { "name": "Founded", "type": "integer" },
-      { "name": "Industry", "type": "string" },
-      { "name": "Number of employees", "type": "integer" }
-    ]    
-  },
-  "status": { 
-		"state": "CREATED",
-    "preview": [
-      { "name": "Index", "value": [2, 233, 250, 525, 678] },
-      {
-        "name": "Organization Id",
-        "value": [
-          "AAC4f9aBF86EAeF",
-          "27fbC78271f3Aa2",
-          "B715731fa4a6CDB",
-          "df66E70fAE1aa5d",
-          "A3B8d27d51aae2f"
-        ]
-      },
-      {
-        "name": "Name",
-        "value": [
-          "Orr-Armstrong",
-          "Chambers-Kemp",
-          "Rojas, Andrews and Odonnell",
-          "Barnett-Randolph",
-          "Hanson, Newman and Bradley"
-        ]
-      },
-      {
-        "name": "Website",
-        "value": [
-          "https://www.chapman.net/",
-          "http://cooley-murphy.com/",
-          "http://www.wells-harrison.org/",
-          "http://donaldson.com/",
-          "http://www.shepherd.com/"
-        ]
-      },
-      {
-        "name": "Country",
-        "value": ["Algeria", "Algeria", "Algeria", "Algeria", "Algeria"]
-      },
-      {
-        "name": "Description",
-        "value": [
-          "Ergonomic radical budgetary management",
-          "Visionary attitude-oriented analyzer",
-          "Right-sized explicit migration",
-          "Centralized 24hour adapter",
-          "Customizable fresh-thinking task-force"
-        ]
-      },
-      { "name": "Founded", "value": [1970, 2021, 1981, 1998, 2021] },
-      {
-        "name": "Industry",
-        "value": [
-          "Import / Export",
-          "Accounting",
-          "Library",
-          "Automotive",
-          "Individual / Family Services"
-        ]
-      },
-      { "name": "Number of employees", "value": [7994, 4288, 6429, 7518, 2135] }
-    ]		 
-	},
-  "project": "proj",
-  "name": "nefertem-schema",
-  "embedded": true
+  }
 }

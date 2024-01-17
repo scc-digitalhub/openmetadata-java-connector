@@ -8,9 +8,21 @@ public class S3Parser extends DataItemParser {
 	
 	@Override
 	public void parseItem(JsonNode rootNode) {
-		project = rootNode.get("metadata").get("project").asText();
-		name = rootNode.get("metadata").get("name").asText();
-		version = rootNode.get("metadata").get("version").asText();
+		if(rootNode.get("metadata").hasNonNull("project")) {
+			project = rootNode.get("metadata").get("project").asText();
+		} else {
+			project = rootNode.get("project").asText();
+		}
+		if(rootNode.get("metadata").hasNonNull("name")) {
+			name = rootNode.get("metadata").get("name").asText();
+		} else {
+			name = rootNode.get("name").asText();
+		}
+		if(rootNode.get("metadata").hasNonNull("version")) {
+			version = rootNode.get("metadata").get("version").asText();
+		} else {
+			version = rootNode.get("id").asText();
+		}
 		source = rootNode.get("spec").get("key").asText();
 		key = project + "_" + name;
 		path = rootNode.get("spec").get("path").asText();

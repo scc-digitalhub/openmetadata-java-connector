@@ -34,7 +34,8 @@ public class MessageQueueManager {
         try {
             String json = new String(delivery.getBody(), "UTF-8");
             logger.debug("openMetadataEventCallback:" + json);
-            JsonNode rootNode = mapper.readTree(json);
+			JsonNode wrapperNode = mapper.readTree(json);
+            JsonNode rootNode = wrapperNode.get("it.smartcommunitylabdhub.core.models.entities.dataitem.DataItemEntity");
             String kind = rootNode.get("kind").asText();
             switch (kind) {
 			case "dataitem": {

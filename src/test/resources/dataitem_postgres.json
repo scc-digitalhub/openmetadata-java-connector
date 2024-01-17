@@ -1,93 +1,95 @@
 {
-  "project": "project-dbt",
-  "name": "algerian-organizations",
-  "id": "996d1381-f634-428c-a2f9-3d3197ff581e",
-  "kind": "dataitem",
-  "metadata": {
-    "name": "algerian-organizations",
-    "embedded": true,
-    "created": "2024-01-10T09:40:50.200851+01:00",
-    "updated": "2024-01-10T09:40:50.201134+01:00",
+  "it.smartcommunitylabdhub.core.models.entities.dataitem.DataItemEntity": {
     "project": "project-dbt",
-    "version": "996d1381-f634-428c-a2f9-3d3197ff581e"
-  },
-  "spec": {
-    "key": "store://project-dbt/dataitems/dataitem/algerian-organizations:996d1381-f634-428c-a2f9-3d3197ff581e",
-    "path": "sql://dbt/public/algerian-organizations_v996d1381-f634-428c-a2f9-3d3197ff581e",
-    "schema": [
-      { "name": "Index", "type": "integer" },
-      { "name": "Organization Id", "type": "string" },
-      { "name": "Name", "type": "string" },
-      { "name": "Website", "type": "string" },
-      { "name": "Country", "type": "string" },
-      { "name": "Description", "type": "string" },
-      { "name": "Founded", "type": "integer" },
-      { "name": "Industry", "type": "string" },
-      { "name": "Number of employees", "type": "integer" }
-    ],
-    "raw_code": "V0lUSCB0YWIgQVMgKAogICAgU0VMRUNUICAqCiAgICBGUk9NICAgIHt7IHJlZignb3JnYW5pemF0aW9ucycpIH19CikKU0VMRUNUICAqCkZST00gICAgdGFiCldIRVJFICAgdGFiLiJDb3VudHJ5IiA9ICdBbGdlcmlhJw==",
-    "compiled_code": "V0lUSCB0YWIgQVMgKAogICAgU0VMRUNUICAqCiAgICBGUk9NICAgICJkYnQiLiJwdWJsaWMiLiJvcmdhbml6YXRpb25zX3Y2OTFmYmI2OS00NTFkLTQ4ODYtOGEwYS0wYTkyYjg1MTljZGEiCikKU0VMRUNUICAqCkZST00gICAgdGFiCldIRVJFICAgdGFiLiJDb3VudHJ5IiA9ICdBbGdlcmlhJw=="
-  },
-  "status": {
-    "state": "CREATED",
-    "preview": [
-      { "name": "Index", "value": [2, 233, 250, 525, 678] },
-      {
-        "name": "Organization Id",
-        "value": [
-          "AAC4f9aBF86EAeF",
-          "27fbC78271f3Aa2",
-          "B715731fa4a6CDB",
-          "df66E70fAE1aa5d",
-          "A3B8d27d51aae2f"
-        ]
-      },
-      {
-        "name": "Name",
-        "value": [
-          "Orr-Armstrong",
-          "Chambers-Kemp",
-          "Rojas, Andrews and Odonnell",
-          "Barnett-Randolph",
-          "Hanson, Newman and Bradley"
-        ]
-      },
-      {
-        "name": "Website",
-        "value": [
-          "https://www.chapman.net/",
-          "http://cooley-murphy.com/",
-          "http://www.wells-harrison.org/",
-          "http://donaldson.com/",
-          "http://www.shepherd.com/"
-        ]
-      },
-      {
-        "name": "Country",
-        "value": ["Algeria", "Algeria", "Algeria", "Algeria", "Algeria"]
-      },
-      {
-        "name": "Description",
-        "value": [
-          "Ergonomic radical budgetary management",
-          "Visionary attitude-oriented analyzer",
-          "Right-sized explicit migration",
-          "Centralized 24hour adapter",
-          "Customizable fresh-thinking task-force"
-        ]
-      },
-      { "name": "Founded", "value": [1970, 2021, 1981, 1998, 2021] },
-      {
-        "name": "Industry",
-        "value": [
-          "Import / Export",
-          "Accounting",
-          "Library",
-          "Automotive",
-          "Individual / Family Services"
-        ]
-      },
-      { "name": "Number of employees", "value": [7994, 4288, 6429, 7518, 2135] }
-    ]
+    "name": "algerian-organizations",
+    "id": "996d1381-f634-428c-a2f9-3d3197ff581e",
+    "kind": "dataitem",
+    "metadata": {
+      "name": "algerian-organizations",
+      "embedded": true,
+      "created": "2024-01-10T09:40:50.200851+01:00",
+      "updated": "2024-01-10T09:40:50.201134+01:00",
+      "project": "project-dbt",
+      "version": "996d1381-f634-428c-a2f9-3d3197ff581e"
+    },
+    "spec": {
+      "key": "store://project-dbt/dataitems/dataitem/algerian-organizations:996d1381-f634-428c-a2f9-3d3197ff581e",
+      "path": "sql://dbt/public/algerian-organizations_v996d1381-f634-428c-a2f9-3d3197ff581e",
+      "schema": [
+        { "name": "Index", "type": "integer" },
+        { "name": "Organization Id", "type": "string" },
+        { "name": "Name", "type": "string" },
+        { "name": "Website", "type": "string" },
+        { "name": "Country", "type": "string" },
+        { "name": "Description", "type": "string" },
+        { "name": "Founded", "type": "integer" },
+        { "name": "Industry", "type": "string" },
+        { "name": "Number of employees", "type": "integer" }
+      ],
+      "raw_code": "V0lUSCB0YWIgQVMgKAogICAgU0VMRUNUICAqCiAgICBGUk9NICAgIHt7IHJlZignb3JnYW5pemF0aW9ucycpIH19CikKU0VMRUNUICAqCkZST00gICAgdGFiCldIRVJFICAgdGFiLiJDb3VudHJ5IiA9ICdBbGdlcmlhJw==",
+      "compiled_code": "V0lUSCB0YWIgQVMgKAogICAgU0VMRUNUICAqCiAgICBGUk9NICAgICJkYnQiLiJwdWJsaWMiLiJvcmdhbml6YXRpb25zX3Y2OTFmYmI2OS00NTFkLTQ4ODYtOGEwYS0wYTkyYjg1MTljZGEiCikKU0VMRUNUICAqCkZST00gICAgdGFiCldIRVJFICAgdGFiLiJDb3VudHJ5IiA9ICdBbGdlcmlhJw=="
+    },
+    "status": {
+      "state": "CREATED",
+      "preview": [
+        { "name": "Index", "value": [2, 233, 250, 525, 678] },
+        {
+          "name": "Organization Id",
+          "value": [
+            "AAC4f9aBF86EAeF",
+            "27fbC78271f3Aa2",
+            "B715731fa4a6CDB",
+            "df66E70fAE1aa5d",
+            "A3B8d27d51aae2f"
+          ]
+        },
+        {
+          "name": "Name",
+          "value": [
+            "Orr-Armstrong",
+            "Chambers-Kemp",
+            "Rojas, Andrews and Odonnell",
+            "Barnett-Randolph",
+            "Hanson, Newman and Bradley"
+          ]
+        },
+        {
+          "name": "Website",
+          "value": [
+            "https://www.chapman.net/",
+            "http://cooley-murphy.com/",
+            "http://www.wells-harrison.org/",
+            "http://donaldson.com/",
+            "http://www.shepherd.com/"
+          ]
+        },
+        {
+          "name": "Country",
+          "value": ["Algeria", "Algeria", "Algeria", "Algeria", "Algeria"]
+        },
+        {
+          "name": "Description",
+          "value": [
+            "Ergonomic radical budgetary management",
+            "Visionary attitude-oriented analyzer",
+            "Right-sized explicit migration",
+            "Centralized 24hour adapter",
+            "Customizable fresh-thinking task-force"
+          ]
+        },
+        { "name": "Founded", "value": [1970, 2021, 1981, 1998, 2021] },
+        {
+          "name": "Industry",
+          "value": [
+            "Import / Export",
+            "Accounting",
+            "Library",
+            "Automotive",
+            "Individual / Family Services"
+          ]
+        },
+        { "name": "Number of employees", "value": [7994, 4288, 6429, 7518, 2135] }
+      ]
+    }
   }
 }
