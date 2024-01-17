@@ -31,22 +31,24 @@ public abstract class DataItemParser {
 				previewMap.put(previewNode.get("name").asText(), previewNode);
 			}
 		}
-		Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").elements();
-		while(columnsNode.hasNext()) {
-			JsonNode columnNode = (JsonNode) columnsNode.next();
-			String name = columnNode.get("name").asText();
-			String type = columnNode.get("type").asText();
-			TableColumn column = new TableColumn(name, PostgresType.getDataType(type));
-			if(previewMap.containsKey(name)) {
-				JsonNode previewNode = previewMap.get(name);
-				Iterator<JsonNode> elements = previewNode.get("value").elements();
-				while(elements.hasNext()) {
-					JsonNode node = elements.next();
-					column.getPreview().add(node.asText());
+		if(rootNode.get("spec").hasNonNull("schema")) {
+			Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").elements();
+			while(columnsNode.hasNext()) {
+				JsonNode columnNode = (JsonNode) columnsNode.next();
+				String name = columnNode.get("name").asText();
+				String type = columnNode.get("type").asText();
+				TableColumn column = new TableColumn(name, PostgresType.getDataType(type));
+				if(previewMap.containsKey(name)) {
+					JsonNode previewNode = previewMap.get(name);
+					Iterator<JsonNode> elements = previewNode.get("value").elements();
+					while(elements.hasNext()) {
+						JsonNode node = elements.next();
+						column.getPreview().add(node.asText());
+					}
 				}
-			}
-			columns.add(column);
-		}		
+				columns.add(column);
+			}			
+		}
 	}
 	
 	public String getProject() {
