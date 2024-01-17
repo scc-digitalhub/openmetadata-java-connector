@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConf {
 
-    public static final String openMetadataEvent = "openmetadata-event";
+    public static final String openMetadataEvent = "dhCoreQueue";
     
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
