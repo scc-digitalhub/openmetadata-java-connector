@@ -1,8 +1,12 @@
-name: Create and publish a Docker image
+name: Create and publish a cache Docker image
 on:
   push:
+    branches:
+      - main
     paths:
-    - '**pom.xml'
+      - pom.xml
+    tags-ignore:
+      - "*"
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
