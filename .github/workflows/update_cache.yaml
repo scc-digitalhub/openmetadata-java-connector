@@ -1,7 +1,8 @@
 name: Create and publish a Docker image
 on:
-  release:
-    types: [published]
+  push:
+    paths:
+    - '**pom.xml'
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -25,6 +26,10 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=cache
+          flavor: |
+            latest=false
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.1.0
         with:
@@ -32,5 +37,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-          
