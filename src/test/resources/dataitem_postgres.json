@@ -1,95 +1,86 @@
 {
   "it.smartcommunitylabdhub.core.models.entities.dataitem.DataItemEntity": {
-    "project": "project-dbt",
-    "name": "algerian-organizations",
-    "id": "996d1381-f634-428c-a2f9-3d3197ff581e",
-    "kind": "dataitem",
-    "metadata": {
-      "name": "algerian-organizations",
-      "embedded": true,
-      "created": "2024-01-10T09:40:50.200851+01:00",
-      "updated": "2024-01-10T09:40:50.201134+01:00",
-      "project": "project-dbt",
-      "version": "996d1381-f634-428c-a2f9-3d3197ff581e"
-    },
-    "spec": {
-      "key": "store://project-dbt/dataitems/dataitem/algerian-organizations:996d1381-f634-428c-a2f9-3d3197ff581e",
-      "path": "sql://dbt/public/algerian-organizations_v996d1381-f634-428c-a2f9-3d3197ff581e",
-      "schema": [
-        { "name": "Index", "type": "integer" },
-        { "name": "Organization Id", "type": "string" },
-        { "name": "Name", "type": "string" },
-        { "name": "Website", "type": "string" },
-        { "name": "Country", "type": "string" },
-        { "name": "Description", "type": "string" },
-        { "name": "Founded", "type": "integer" },
-        { "name": "Industry", "type": "string" },
-        { "name": "Number of employees", "type": "integer" }
-      ],
-      "raw_code": "V0lUSCB0YWIgQVMgKAogICAgU0VMRUNUICAqCiAgICBGUk9NICAgIHt7IHJlZignb3JnYW5pemF0aW9ucycpIH19CikKU0VMRUNUICAqCkZST00gICAgdGFiCldIRVJFICAgdGFiLiJDb3VudHJ5IiA9ICdBbGdlcmlhJw==",
-      "compiled_code": "V0lUSCB0YWIgQVMgKAogICAgU0VMRUNUICAqCiAgICBGUk9NICAgICJkYnQiLiJwdWJsaWMiLiJvcmdhbml6YXRpb25zX3Y2OTFmYmI2OS00NTFkLTQ4ODYtOGEwYS0wYTkyYjg1MTljZGEiCikKU0VMRUNUICAqCkZST00gICAgdGFiCldIRVJFICAgdGFiLiJDb3VudHJ5IiA9ICdBbGdlcmlhJw=="
-    },
-    "status": {
-      "state": "CREATED",
-      "preview": [
-        { "name": "Index", "value": [2, 233, 250, 525, 678] },
-        {
-          "name": "Organization Id",
-          "value": [
-            "AAC4f9aBF86EAeF",
-            "27fbC78271f3Aa2",
-            "B715731fa4a6CDB",
-            "df66E70fAE1aa5d",
-            "A3B8d27d51aae2f"
-          ]
-        },
-        {
-          "name": "Name",
-          "value": [
-            "Orr-Armstrong",
-            "Chambers-Kemp",
-            "Rojas, Andrews and Odonnell",
-            "Barnett-Randolph",
-            "Hanson, Newman and Bradley"
-          ]
-        },
-        {
-          "name": "Website",
-          "value": [
-            "https://www.chapman.net/",
-            "http://cooley-murphy.com/",
-            "http://www.wells-harrison.org/",
-            "http://donaldson.com/",
-            "http://www.shepherd.com/"
-          ]
-        },
-        {
-          "name": "Country",
-          "value": ["Algeria", "Algeria", "Algeria", "Algeria", "Algeria"]
-        },
-        {
-          "name": "Description",
-          "value": [
-            "Ergonomic radical budgetary management",
-            "Visionary attitude-oriented analyzer",
-            "Right-sized explicit migration",
-            "Centralized 24hour adapter",
-            "Customizable fresh-thinking task-force"
-          ]
-        },
-        { "name": "Founded", "value": [1970, 2021, 1981, 1998, 2021] },
-        {
-          "name": "Industry",
-          "value": [
-            "Import / Export",
-            "Accounting",
-            "Library",
-            "Automotive",
-            "Individual / Family Services"
-          ]
-        },
-        { "name": "Number of employees", "value": [7994, 4288, 6429, 7518, 2135] }
-      ]
-    }
-  }
+	  "project": "project-dbt",
+	  "name": "department-60",
+	  "id": "a256b273-eedb-4305-9e6d-f6fe78ff5c59",
+	  "kind": "table",
+	  "metadata": {
+	    "name": "department-60",
+	    "embedded": true,
+	    "created": "2024-03-05T11:26:03.783154+01:00",
+	    "updated": "2024-03-05T11:26:03.783154+01:00",
+	    "project": "project-dbt",
+	    "version": "a256b273-eedb-4305-9e6d-f6fe78ff5c59"
+	  },
+	  "spec": {
+	    "key": "store://project-dbt/dataitems/table/department-60:a256b273-eedb-4305-9e6d-f6fe78ff5c59",
+	    "path": "sql://dbt/public/department-60_va256b273-eedb-4305-9e6d-f6fe78ff5c59",
+			"schema": {
+        "fields": [
+          { "name": "EMPLOYEE_ID", "type": "integer" },
+          { "name": "FIRST_NAME", "type": "string" },
+          { "name": "LAST_NAME", "type": "string" },
+          { "name": "EMAIL", "type": "string" },
+          { "name": "PHONE_NUMBER", "type": "string" },
+          { "name": "HIRE_DATE", "type": "string" },
+          { "name": "JOB_ID", "type": "string" },
+          { "name": "SALARY", "type": "integer" },
+          { "name": "COMMISSION_PCT", "type": "string" },
+          { "name": "MANAGER_ID", "type": "string" },
+          { "name": "DEPARTMENT_ID", "type": "integer" }
+        ]
+      }	  },
+	  "status": {
+	    "state": "CREATED",
+	    "preview": {
+	      "cols": [
+	        { "name": "EMPLOYEE_ID", "value": [103, 104, 105, 106, 107] },
+	        {
+	          "name": "FIRST_NAME",
+	          "value": ["Alexander", "Bruce", "David", "Valli", "Diana"]
+	        },
+	        {
+	          "name": "LAST_NAME",
+	          "value": ["Hunold", "Ernst", "Austin", "Pataballa", "Lorentz"]
+	        },
+	        {
+	          "name": "EMAIL",
+	          "value": ["AHUNOLD", "BERNST", "DAUSTIN", "VPATABAL", "DLORENTZ"]
+	        },
+	        {
+	          "name": "PHONE_NUMBER",
+	          "value": [
+	            "590.423.4567",
+	            "590.423.4568",
+	            "590.423.4569",
+	            "590.423.4560",
+	            "590.423.5567"
+	          ]
+	        },
+	        {
+	          "name": "HIRE_DATE",
+	          "value": [
+	            "03-JAN-06",
+	            "21-MAY-07",
+	            "25-JUN-05",
+	            "05-FEB-06",
+	            "07-FEB-07"
+	          ]
+	        },
+	        {
+	          "name": "JOB_ID",
+	          "value": ["IT_PROG", "IT_PROG", "IT_PROG", "IT_PROG", "IT_PROG"]
+	        },
+	        { "name": "SALARY", "value": [9000, 6000, 4800, 4800, 4200] },
+	        {
+	          "name": "COMMISSION_PCT",
+	          "value": [" - ", " - ", " - ", " - ", " - "]
+	        },
+	        { "name": "MANAGER_ID", "value": ["102", "103", "103", "103", "103"] },
+	        { "name": "DEPARTMENT_ID", "value": [60, 60, 60, 60, 60] }
+	      ],
+	      "rows": 5
+	    }
+	  }
+	}  
 }

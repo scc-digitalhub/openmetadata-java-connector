@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -24,15 +25,15 @@ public abstract class DataItemParser {
 	
 	void fillColumns(JsonNode rootNode) {
 		Map<String, JsonNode> previewMap = new HashMap<>();
-		if(rootNode.get("status").hasNonNull("preview")) {
-			Iterator<JsonNode> previewsNode = rootNode.get("status").get("preview").elements();
+		if(rootNode.get("status").hasNonNull("preview") && rootNode.get("status").get("preview").hasNonNull("cols")) {
+			Iterator<JsonNode> previewsNode = rootNode.get("status").get("preview").get("cols").elements();
 			while(previewsNode.hasNext()) {
 				JsonNode previewNode = (JsonNode) previewsNode.next();
 				previewMap.put(previewNode.get("name").asText(), previewNode);
 			}
 		}
-		if(rootNode.get("spec").hasNonNull("schema")) {
-			Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").elements();
+		if(rootNode.get("spec").hasNonNull("schema") && rootNode.get("spec").get("schema").hasNonNull("fields")) {
+			Iterator<JsonNode> columnsNode = rootNode.get("spec").get("schema").get("fields").elements();
 			while(columnsNode.hasNext()) {
 				JsonNode columnNode = (JsonNode) columnsNode.next();
 				String name = columnNode.get("name").asText();
@@ -48,6 +49,18 @@ public abstract class DataItemParser {
 				}
 				columns.add(column);
 			}			
+		} else {
+			for(Entry<String, JsonNode> entry : previewMap.entrySet()) {
+				JsonNode previewNode = entry.getValue();
+				Iterator<JsonNode> elements = previewNode.get("value").elements();
+				TableColumn column = new TableColumn();
+				column.setName(previewNode.get("name").asText());
+				while(elements.hasNext()) {
+					JsonNode node = elements.next();
+					column.getPreview().add(node.asText());
+				}
+				columns.add(column);
+			}
 		}
 	}
 	
